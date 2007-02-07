@@ -1,0 +1,1 @@
+This is a programming library to extract information from diagrams created by Visio by Microsoft Corp.
