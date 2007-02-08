@@ -1,8 +1,9 @@
-﻿from xml.etree import ElementTree, QName
+﻿from xml.etree import ElementTree
+from xml.etree.ElementTree import QName
 
-# VISIO XML FORMAT PARSING SUPPORT
+__all__ = ("namespace",)
 
-ns = "http://schemas.microsoft.com/visio/2003/core"
+namespace = ns = "http://schemas.microsoft.com/visio/2003/core"
 
 def tag(tagname):
    return QName(ns, tag)

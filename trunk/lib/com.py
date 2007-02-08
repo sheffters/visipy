@@ -1,35 +1,52 @@
+from __future__ import with_statement
 import os, sys
 import win32com.client as client
 from zope.interface import implements
-     
+from zope.interface import providedBy, implementedBy
 
-class VisioApplication:
+from model import *
 
-   implements (IApplication)
+__all__ = ("VisioApplication", "VisioDocument", "VisioPage", "VisioShape")
 
-   def __init__(self):
+
+def VisioApplication(visible=False):
+   app = IApplication(client.Dispatch("Visio.Application"))
+   #if visible:
+   #   app._app.visible = 1
+   #else:
+   #   app._app.visible = 0
+   return app
+
+
+   
+class VisioIApplicationAdapter:
+
+   implements(IApplication)
+
+   def __init__(self, context):
       "start the application"
-      self._app = client.Dispatch("Visio.Application")
-
-      if visible:
-         self._app.visible = 1
-      else:
-         self._app.visible = 0
-
+      self._app = context
       self.documents = {}
+
       
    @property
    def visible(self):
       return self._app.visible
-               
-   def open(filename):
+   
+   @property
+   def objects(self):
+      pass
+      
+   def open(self, filename):
       "open a document"
-         self.documents[filename] = Document(self._app.Documents.Open(filename))
+      #self.documents[filename] = VisioDocument(self._app.Documents.Open(filename))
 
    def quit(self):
       self._app.Quit()
 
-      
+registry.register([None], IApplication, '', VisioIApplicationAdapter)
+
+
 class VisioDocument:
 
    implements (IDocument)
@@ -39,27 +56,31 @@ class VisioDocument:
       self._doc = obj
       
       @property
-      def pages(self):
+      def objects(self):
          for p in self.Pages:
             yield Page(p)
       
 
 class VisioPage:
 
-   implements (IVisioPage)
+   implements (IPage)
 
    def __init__(self, obj):
       self._obj = obj
       
    @property
-   def name(self)
+   def name(self):
       return self._obj.Name
       
    @property
-   def shapes(self):
+   def objects(self):
       for s in self._obj.Shapes:
          yield Shape(s)
-   
+
+   @property
+   def master(self):
+      return self._obj.master
+
    def __str__(self):
       return self.name
 
@@ -118,18 +139,6 @@ class VisioShape:
    def __str__(self):
       return self.name
    
-
-      
 if __name__=="__main__":
-   encoding ="utf-8"
-   
-   a = Application()
-   a.open(os.getcwd() + os.sep + "arvoverkko.vsd")
-   document = a.documents
-   for p in v.pages:
-      print p
-      for s in p.shapes:
-         print s.name.encode(encoding)
-         print s.master.encode(encoding)
-         if s.isconnector:
-            print "%s -> %s" % (s.shapefrom, s.shapeto)
+   a = VisioApplication()
+   print a._app

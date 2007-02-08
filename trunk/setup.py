@@ -13,7 +13,7 @@ Intended Audience :: Developers
 import sys
 from distutils.core import setup
 
-import visipy
+#import visipy
 
 if sys.version_info < (2, 3):
     _setup = setup
