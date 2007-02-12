@@ -11,10 +11,10 @@ __all__ = ("VisioApplication", "VisioDocument", "VisioPage", "VisioShape")
 
 def VisioApplication(visible=False):
    app = IApplication(client.Dispatch("Visio.Application"))
-   #if visible:
-   #   app._app.visible = 1
-   #else:
-   #   app._app.visible = 0
+   if visible:
+      app._app.visible = 1
+   else:
+      app._app.visible = 0
    return app
 
 
@@ -39,7 +39,7 @@ class VisioIApplicationAdapter:
       
    def open(self, filename):
       "open a document"
-      #self.documents[filename] = VisioDocument(self._app.Documents.Open(filename))
+      self.documents[filename] = VisioDocument(self._app.Documents.Open(filename))
 
    def quit(self):
       self._app.Quit()
