@@ -8,7 +8,7 @@ registry = AdapterRegistry()
 
 def hook(provided, obj):
    adapter = registry.lookup1(providedBy(obj), provided, '')
-   return adapter(object)
+   return adapter(obj)
 
 adapter_hooks.append(hook)
 

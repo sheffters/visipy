@@ -9,7 +9,7 @@ class BasicAppTests(unittest.TestCase):
    
    def testOpenFile(self):
       path = sys.path[0] + os.sep + "testfile.vsd"
-      #self.app.open(path)
+      self.app.open(path)
 
    def tearDown(self):
       self.app.quit()
