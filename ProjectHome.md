@@ -1,0 +1,1 @@
+Part of the library functionality uses COM and thus requires a copy of Visio. Visio can also (at least in newer versions) also export XML files; this library provides some guidance for that as well.
